@@ -1,0 +1,9 @@
+# dependencies: libglfw3-dev (>= 3.2.1)
+
+cpp17 = Environment(
+	CCFLAGS=['-std=c++17', '-Wall', '-O0', '-g'],
+	CPPDEFINES=['GLFW_INCLUDE_ES2'])
+
+cpp17.ParseConfig('pkg-config --cflags --libs glfw3 glesv2')
+
+cpp17.Program('triangle.cpp')

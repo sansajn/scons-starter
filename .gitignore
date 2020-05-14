@@ -1,0 +1,9 @@
+*.o
+.sconsign.dblite
+/.readme.md.swp
+/triangle/triangle
+/3dmath/3dmath
+/basic/main
+/environment/main
+/physics/libphys.a
+/physics/physics

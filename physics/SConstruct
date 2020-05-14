@@ -1,0 +1,8 @@
+cpp17 = Environment(
+	CXX='clang++', CCFLAGS=['-std=c++17', '-Wall'])
+
+cpp17.ParseConfig('pkg-config --cflags --libs glfw3 gl')
+
+phys = cpp17.StaticLibrary('phys', Glob('phys/*.cpp'))
+
+cpp17.Program('physics', ['main.cpp', phys])
