@@ -1,0 +1,7 @@
+import os
+cpp = Environment()
+main = cpp.Program('main.cpp')
+
+target_dir = '/opt/foo'
+cpp.Install(target_dir, main)
+cpp.Alias('install', target_dir)

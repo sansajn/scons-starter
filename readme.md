@@ -1,6 +1,6 @@
 # project construction made easy
 
-In this text, you find tips help you start with building *C++* programs using [SCons](https://scons.org) project construction tool under *Linux*.
+In the following lines you find tips help you start with building *C++* programs using [SCons](https://scons.org) project construction tool under *Linux*.
 
 > *SCons* package can be installed with `sudo apt install scons ` command
 
@@ -11,6 +11,7 @@ In this text, you find tips help you start with building *C++* programs using [S
 	- [more source files](#more-source-files)
 - [third party dependencies](#third-party-dependencies)
 - [static library](#static-library)
+- [install command](#install-command)
 
 
 ## basics
@@ -39,7 +40,7 @@ done!
 
 ### compiler settings
 
-Let's say we want to force building against *C++17* standard and also turn on all compiler warnings. To do that, we can adjust compiler options with `Environment` variable this way
+Let's say we want to force building against *C++17* standard and also turn on all compiler warnings. To do that, we can adjust compiler options with [`Environment`][Environ] variable this way
 
 ```
 cpp17 = Environment(CCFLAGS=['-std=c++17', '-Wall'])
@@ -132,10 +133,28 @@ cpp17.Program('physics', ['main.cpp', phys])
 
 > We need to use *clang* there, because physics library use non-standard *C++* language feature not supported by *GCC*. Install clang with `sudo apt install clang` command.
 
-> **tip**: there are also builders to create shared libraries as [`SharedLibrary()`][SharedLibrary] and object files as [`Object()`][Object]
+> **tip**: there are also builders for shared libraries [`SharedLibrary()`][SharedLibrary] and object files [`Object()`][Object]
+
+## install command
+
+Sometimes it can be handy to provide *install* command so project can be automatically installed to proper destination without too much effort from user side. In *SCons* install process can be done with [`Install()`][Install] builder and [`Alias()`][Alias] function this way
+
+```python
+target_dir = '/opt/foo'
+cpp.Install(target_dir, main)
+cpp.Alias('install', target_dir)
+```
+
+> see full [SConstruct](install/SConstruct) file version
+
+Now we can type `scons install` to install `main` executable to `/opt/foo` directory.
+
+> **tip**: in case you don't have write access to `/opt` directory, use `--install-sandbox` option to prefix target directory like `scons --install-sandbox=/home/adam install` to install `main` executable to `/home/adam/opt/foo` instead of `/opt/foo` directory
+
+Maybe, you are asking yourself whether uninstall is also possible? Yes, it is! We've got uninstall for free, we can type `scons -c install` which will uninstall `main` executable from `/opt/foo` directory.
 
 
-
+[Environ]: https://scons.org/doc/production/HTML/scons-man.html#f-Environment
 [Glob]: https://scons.org/doc/production/HTML/scons-man.html#f-Glob
 [ParseConfig]: https://scons.org/doc/production/HTML/scons-man.html#f-ParseConfig
 [Library]: https://scons.org/doc/production/HTML/scons-man.html#b-Library
@@ -143,6 +162,8 @@ cpp17.Program('physics', ['main.cpp', phys])
 [Program]: https://scons.org/doc/production/HTML/scons-man.html#b-Program
 [SharedLibrary]: https://scons.org/doc/production/HTML/scons-man.html#b-SharedLibrary
 [Object]: https://scons.org/doc/production/HTML/scons-man.html#b-Object
+[Install]: https://scons.org/doc/production/HTML/scons-man.html#b-Install
+[Alias]: https://scons.org/doc/production/HTML/scons-man.html#f-Alias
 [GamePhys]: http://gamephysicscookbook.com/
 [sequence]: https://docs.python.org/3.4/library/stdtypes.html#sequence-types-list-tuple-range
 [string]: https://docs.python.org/3.4/library/stdtypes.html#text-sequence-type-str
